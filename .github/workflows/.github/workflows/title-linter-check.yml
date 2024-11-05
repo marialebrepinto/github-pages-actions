@@ -19,7 +19,7 @@ jobs:
     - name: Change HTML Title
       run: |
         NEW_TITLE="${{ github.event.inputs.title }}"
-        sed -i "s/<title>.*<\/title>/<title>$NEW_TITLE<\/title>/" path/to/your/index.html
+        sed -i "s/<title>.*<\/title>/<title>$NEW_TITLE<\/title>/" index.html
 
     - name: Run HTML Linter
       uses: reviewdog/action-htmlhint@v1
