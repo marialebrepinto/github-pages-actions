@@ -21,13 +21,18 @@ jobs:
         NEW_TITLE="${{ github.event.inputs.title }}"
         sed -i "s/<title>.*<\/title>/<title>$NEW_TITLE<\/title>/" index.html
 
-    - name: Commit title change
+    - name: Check for HTML changes and commit
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add index.html
-        git commit -m "Update page title to '$NEW_TITLE'"
-      continue-on-error: true  # This will allow the workflow to continue if there's no change in the title
+        
+        # Check if there are changes in index.html
+        if [ -n "$(git diff index.html)" ]; then
+          git add -f index.html
+          git commit -m "Update page title to '$NEW_TITLE'"
+        else
+          echo "No changes to commit"
+        fi
 
     - name: Run HTML Linter
       uses: reviewdog/action-htmlhint@v1
