@@ -21,17 +21,17 @@ jobs:
         NEW_TITLE="${{ github.event.inputs.title }}"
         sed -i "s/<title>.*<\/title>/<title>$NEW_TITLE<\/title>/" index.html
 
-    - name: Check for HTML changes and commit
+    - name: Commit title change if modified
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         
-        # Check if there are changes in index.html
-        if [ -n "$(git diff index.html)" ]; then
-          git add -f index.html
-          git commit -m "Update page title to '$NEW_TITLE'"
-        else
+        # Check for changes specifically in index.html
+        if git diff --exit-code index.html; then
           echo "No changes to commit"
+        else
+          git add index.html
+          git commit -m "Update page title to '$NEW_TITLE'"
         fi
 
     - name: Run HTML Linter
