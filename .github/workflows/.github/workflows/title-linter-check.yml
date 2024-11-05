@@ -20,27 +20,20 @@ jobs:
       run: |
         NEW_TITLE="${{ github.event.inputs.title }}"
         sed -i "s/<title>.*<\/title>/<title>$NEW_TITLE<\/title>/" index.html
-
-    - name: Stash untracked files
-      run: |
-        git stash push --include-untracked
+        touch index.html  # Force update the timestamp to ensure Git detects the change
 
     - name: Commit title change if modified
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-        # Check for changes specifically in index.html
+        
+        # Check if index.html has changes
         if ! git diff --quiet index.html; then
           git add index.html
           git commit -m "Update page title to '$NEW_TITLE'"
         else
           echo "No changes to commit"
         fi
-
-    - name: Restore stashed files
-      run: |
-        git stash pop || echo "Nothing to restore"
 
     - name: Run HTML Linter
       uses: reviewdog/action-htmlhint@v1
