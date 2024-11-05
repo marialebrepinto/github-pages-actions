@@ -42,7 +42,7 @@ jobs:
         // Generate README content
         const readmeContent = \`# \${title}\n\n\${description}\n\nThis README was generated automatically from index.html.\`;
 
-            - name: Commit and push changes
+    - name: Commit and push changes
 
       run: |
 
