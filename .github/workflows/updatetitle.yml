@@ -1,4 +1,4 @@
-name: Change Title and Lint HTML
+name: Change Title
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
         default: 'New Page Title'
 
 jobs:
-  update_and_lint:
+  update_title:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,9 +33,3 @@ jobs:
         else
           echo "No changes to commit"
         fi
-
-    - name: Run HTML Linter
-      uses: reviewdog/action-htmlhint@v1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        reporter: github-pr-check
